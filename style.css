@@ -23,22 +23,101 @@ body {
   display: flex;
   flex-direction: column;
 }
-/* the night sky: three layers of tiny stars, drawn with CSS */
-body::before {
-  content: "";
-  position: fixed; inset: 0; z-index: -1;
+/* the night sky, drawn with CSS and moving slowly: a far layer of tiny stars drifting one way, a nearer layer
+   drifting a little faster and twinkling, nebula glows that breathe, and now and then a shooting star.
+   Only transform and opacity animate, so phones stay smooth. Reduce Motion (the system setting) stills it all. */
+html { background: var(--night); }
+body { background: transparent; }
+html::before, body::before, body::after {
+  content: ""; position: fixed; pointer-events: none; z-index: -1;
+}
+html::before {   /* nebulae and the glow at the top */
+  inset: -10%;
   background:
-    radial-gradient(1px 1px at 12% 18%, #fff8 50%, transparent 51%),
-    radial-gradient(1px 1px at 72% 12%, #fff9 50%, transparent 51%),
-    radial-gradient(1.5px 1.5px at 38% 64%, #fffa 50%, transparent 51%),
-    radial-gradient(1px 1px at 88% 52%, #fff7 50%, transparent 51%),
-    radial-gradient(1px 1px at 22% 86%, #fff6 50%, transparent 51%),
-    radial-gradient(1.5px 1.5px at 56% 32%, #f0d48a99 50%, transparent 51%),
-    radial-gradient(1px 1px at 94% 88%, #fff7 50%, transparent 51%),
-    radial-gradient(1px 1px at 6% 48%, #fff6 50%, transparent 51%),
-    radial-gradient(ellipse at 50% -10%, #2a1840 0%, transparent 60%),
-    var(--night);
-  background-size: 340px 340px, 420px 420px, 520px 520px, 300px 300px, 460px 460px, 610px 610px, 380px 380px, 270px 270px, 100% 100%, 100% 100%;
+    radial-gradient(ellipse at 50% 0%, #2a1840 0%, transparent 55%),
+    radial-gradient(ellipse 45% 35% at 12% 70%, rgba(90, 30, 130, 0.28), transparent 70%),
+    radial-gradient(ellipse 40% 30% at 90% 30%, rgba(50, 25, 120, 0.26), transparent 70%),
+    radial-gradient(ellipse 30% 22% at 85% 85%, rgba(130, 40, 115, 0.16), transparent 70%);
+  animation: nebula 70s ease-in-out infinite alternate;
+}
+body::before {   /* far stars: one 600px tile, drifting left by exactly one tile, so the loop never shows a seam */
+  top: 0; left: 0; width: calc(100% + 600px); height: 100%;
+  background:
+    radial-gradient(1px 1px at 52% 85%, #fff7 50%, transparent 51%),
+    radial-gradient(1px 1px at 70% 14%, #fff5 50%, transparent 51%),
+    radial-gradient(1px 1px at 66% 29%, #fff5 50%, transparent 51%),
+    radial-gradient(1px 1px at 57% 55%, #fff5 50%, transparent 51%),
+    radial-gradient(1px 1px at 13% 72%, #fff7 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 74% 17%, #fff5 50%, transparent 51%),
+    radial-gradient(1px 1px at 75% 76%, #fff5 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 30% 7%, #fff5 50%, transparent 51%),
+    radial-gradient(1px 1px at 55% 20%, #fff9 50%, transparent 51%),
+    radial-gradient(1px 1px at 73% 89%, #fff9 50%, transparent 51%),
+    radial-gradient(1px 1px at 76% 75%, #fff5 50%, transparent 51%),
+    radial-gradient(1px 1px at 14% 72%, #fff9 50%, transparent 51%),
+    radial-gradient(1px 1px at 81% 28%, #fff5 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 42% 61%, #fffb 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 40% 33%, #fff9 50%, transparent 51%),
+    radial-gradient(1px 1px at 12% 75%, #fff7 50%, transparent 51%),
+    radial-gradient(1px 1px at 45% 95%, #fffb 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 79% 11%, #fff9 50%, transparent 51%),
+    radial-gradient(1px 1px at 23% 98%, #fffb 50%, transparent 51%),
+    radial-gradient(1px 1px at 64% 55%, #fff7 50%, transparent 51%),
+    radial-gradient(1px 1px at 73% 75%, #fff5 50%, transparent 51%),
+    radial-gradient(1px 1px at 90% 46%, #fff9 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 10% 13%, #fffb 50%, transparent 51%),
+    radial-gradient(1px 1px at 91% 87%, #fffb 50%, transparent 51%),
+    radial-gradient(1px 1px at 95% 91%, #fff5 50%, transparent 51%),
+    radial-gradient(1px 1px at 38% 93%, #fffb 50%, transparent 51%);
+  background-size: 600px 600px;
+  animation: drift-far 420s linear infinite;
+}
+body::after {    /* nearer stars, a little larger and warmer, drifting faster and twinkling */
+  top: 0; left: 0; width: calc(100% + 900px); height: 100%;
+  background:
+    radial-gradient(2px 2px at 87% 46%, #fffc 50%, transparent 51%),
+    radial-gradient(2px 2px at 47% 23%, #fffb 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 65% 9%, #ffffffd0 50%, transparent 51%),
+    radial-gradient(2px 2px at 18% 96%, #ffffffd0 50%, transparent 51%),
+    radial-gradient(2px 2px at 52% 65%, #fffc 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 59% 53%, #fffb 50%, transparent 51%),
+    radial-gradient(2px 2px at 19% 57%, #fffb 50%, transparent 51%),
+    radial-gradient(2px 2px at 92% 55%, #f0d48aaa 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 50% 31%, #ffffffd0 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 24% 21%, #ffffffd0 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 31% 3%, #d8c8ffbb 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 25% 35%, #f0d48aaa 50%, transparent 51%);
+  background-size: 900px 900px;
+  animation: drift-near 300s linear infinite, twinkle 7s ease-in-out infinite alternate;
+}
+/* shooting stars: four of them, each from its own spot in its own direction, on cycles of different lengths
+   (prime numbers of seconds), so the pattern almost never repeats. The bright head leads, the tail trails. */
+.meteors { position: fixed; inset: 0; pointer-events: none; z-index: -1; overflow: hidden; }
+.meteors i {
+  position: absolute; width: 170px; height: 2px; border-radius: 2px;
+  background: linear-gradient(90deg, transparent, rgba(255, 244, 214, 0.95));
+  opacity: 0; transform-origin: 100% 50%;
+  animation: shoot var(--every) linear infinite var(--wait);
+}
+.meteors i:nth-child(1) { top: 14%; left: 70%; --a: 154deg; --every: 17s; --wait: 4s; }
+.meteors i:nth-child(2) { top: 22%; left: 12%; --a: 28deg;  --every: 23s; --wait: 11s; }
+.meteors i:nth-child(3) { top: 62%; left: 78%; --a: 198deg; --every: 29s; --wait: 19s; }
+.meteors i:nth-child(4) { top: 8%;  left: 40%; --a: 112deg; --every: 37s; --wait: 27s; }
+@keyframes drift-far { to { transform: translateX(-600px); } }
+@keyframes drift-near { to { transform: translateX(-900px); } }
+@keyframes twinkle { from { opacity: 1; } to { opacity: 0.45; } }
+@keyframes nebula {
+  from { transform: translate(0, 0) scale(1); opacity: 1; }
+  to { transform: translate(-2%, 1.5%) scale(1.06); opacity: 0.8; }
+}
+@keyframes shoot {
+  0% { opacity: 0; transform: rotate(var(--a)) translateX(0); }
+  0.8% { opacity: 1; }
+  4% { opacity: 0; transform: rotate(var(--a)) translateX(420px); }
+  100% { opacity: 0; transform: rotate(var(--a)) translateX(420px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html::before, body::before, body::after, .meteors i { animation: none; }
 }
 a { color: var(--gilt-bright); text-underline-offset: 3px; }
 a:hover { color: #fff; }
